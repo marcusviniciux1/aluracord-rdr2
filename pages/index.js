@@ -1,52 +1,8 @@
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
+import { useState } from "react";
+import { useRouter } from "next/router";
 import appConfig from "../config.json";
-
-function GlobalStyle() {
-  return (
-    <style global jsx>{`
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: "Open Sans", sans-serif;
-      }
-      /* App fit Height */
-      html,
-      body,
-      #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */
-    `}</style>
-  );
-}
-
-function Title(props) {
-  const Tag = props.tag || "h1";
-  return (
-    <>
-      <Tag>{props.children}</Tag>
-      <style jsx>{`
-        ${Tag} {
-          font-size: 24px;
-          font-weight: 600;
-          color: ${appConfig.theme.colors.neutrals["900"]};
-        }
-      `}</style>
-    </>
-  );
-}
+import Title from "../layout/Title";
 
 /* function HomePage() {
   return (
@@ -62,11 +18,12 @@ export default HomePage;
  */
 
 export default function PaginaInicial() {
-  const username = "marcusviniciux1";
+  // const username = "marcusviniciux1";
+  const [username, setUsername] = useState("marcusviniciux1");
+  const roteamento = useRouter();
 
   return (
     <>
-      <GlobalStyle />
       <Box
         styleSheet={{
           display: "flex",
@@ -101,6 +58,12 @@ export default function PaginaInicial() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (e) {
+              e.preventDefault();
+              window.location.href = "/chat";
+              roteamento.push("/chat");
+            }}
+            z
             styleSheet={{
               display: "flex",
               flexDirection: "column",
@@ -122,7 +85,20 @@ export default function PaginaInicial() {
               {appConfig.name}
             </Text>
 
+            {/* <input
+              type="text"
+              value={username}
+              onChange={function (e) {
+                const valor = e.target.value;
+                setUsername(valor);
+              }}
+            ></input> */}
             <TextField
+              value={username}
+              onChange={function (e) {
+                const valor = e.target.value;
+                setUsername(valor);
+              }}
               fullWidth
               textFieldColors={{
                 neutral: {
@@ -168,7 +144,11 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={`https://github.com/${username}.png`}
+              src={`${
+                username.length <= 2
+                  ? "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/a8/a881079e7abf4c621e86e21116f8c0dd3ee40619_full.jpg"
+                  : `https://github.com/${username}.png`
+              }`}
             />
             <Text
               variant="body4"
