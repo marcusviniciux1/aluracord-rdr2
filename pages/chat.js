@@ -1,18 +1,45 @@
 import { Box, Text, TextField, Image, Button } from "@skynexui/components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import appConfig from "../config.json";
+import { createClient } from "@supabase/supabase-js";
+import Loading from "../layout/Loading";
+
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzI5NjU5MCwiZXhwIjoxOTU4ODcyNTkwfQ.Y7YpT8OvyU_smdcqqAtIweTR4LeQ18fbZX4vht7Icpk";
+const SUPABASE_URL = "https://gzwresjissxzzcjydjkj.supabase.co";
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
   const [mensagem, setMensagem] = useState("");
   const [listaDeMensagens, setListaDeMensagens] = useState([]);
+  const [removeLoading, setRemoveLoading] = useState(false);
+
+  useEffect(() => {
+    supabaseClient
+      .from("mensagens")
+      .select("*")
+      .order("id", { ascending: false })
+      .then(({ data }) => {
+        console.log("Dados da consulta:", data);
+        setListaDeMensagens(data);
+        setRemoveLoading(true);
+      });
+  }, []);
 
   function handleNovaMensagem(novaMensagem) {
     const mensagem = {
-      id: listaDeMensagens.length + 1,
-      de: "vanessametonini",
+      // id: listaDeMensagens.length + 1,
+      de: "marcusviniciux1",
       texto: novaMensagem,
     };
-    setListaDeMensagens([mensagem, ...listaDeMensagens]);
+
+    supabaseClient
+      .from("mensagens")
+      .insert([mensagem])
+      .then(({ data }) => {
+        setListaDeMensagens([data[0], ...listaDeMensagens]);
+      });
+
     setMensagem("");
   }
 
@@ -23,7 +50,7 @@ export default function ChatPage() {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: appConfig.theme.colors.primary["000"],
-        backgroundImage: `url(https://initiate.alphacoders.com/images/977/cropped-1920-1080-977202.jpg?4395)`,
+        backgroundImage: `url(https://images.hdqwalls.com/download/red-dead-redemption-2-illustration-5k-72-1280x720.jpg)`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundBlendMode: "multiply",
@@ -57,6 +84,7 @@ export default function ChatPage() {
             padding: "16px",
           }}
         >
+          {!removeLoading && <Loading />}
           <MessageList mensagens={listaDeMensagens} />
           {/* {listaDeMensagens.map((mensagemAtual) => {
             return (
@@ -188,7 +216,7 @@ function MessageList(props) {
                   display: "inline-block",
                   marginRight: "8px",
                 }}
-                src={`https://github.com/vanessametonini.png`}
+                src={`https://github.com/${mensagem.de}.png`}
               />
               <Text tag="strong">{mensagem.de}</Text>
               <Text

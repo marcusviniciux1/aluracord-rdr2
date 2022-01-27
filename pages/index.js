@@ -31,7 +31,7 @@ export default function PaginaInicial() {
           justifyContent: "center",
           backgroundColor: appConfig.theme.colors.primary["000"],
           backgroundImage:
-            "url(https://initiate.alphacoders.com/images/977/cropped-1920-1080-977202.jpg?4395)",
+            "url(https://images.hdqwalls.com/download/red-dead-redemption-2-illustration-5k-72-1280x720.jpg)",
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundBlendMode: "multiply",
