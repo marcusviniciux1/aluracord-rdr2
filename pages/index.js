@@ -2,7 +2,7 @@ import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import appConfig from "../config.json";
-import Title from "../layout/Title";
+import Title from "../src/layout/Title";
 
 /* function HomePage() {
   return (
@@ -60,10 +60,8 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={function (e) {
               e.preventDefault();
-              window.location.href = "/chat";
-              roteamento.push("/chat");
+              roteamento.push(`/chat?username=${username}`);
             }}
-            z
             styleSheet={{
               display: "flex",
               flexDirection: "column",
