@@ -19,7 +19,7 @@ export default HomePage;
 
 export default function PaginaInicial() {
   // const username = "marcusviniciux1";
-  const [username, setUsername] = useState("marcusviniciux1");
+  const [username, setUsername] = useState("");
   const roteamento = useRouter();
 
   return (
@@ -144,7 +144,7 @@ export default function PaginaInicial() {
               }}
               src={`${
                 username.length <= 2
-                  ? "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/a8/a881079e7abf4c621e86e21116f8c0dd3ee40619_full.jpg"
+                  ? "https://ugc-gaming.net/data/avatars/l/22/22315.jpg?1528305750"
                   : `https://github.com/${username}.png`
               }`}
             />

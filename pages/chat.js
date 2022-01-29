@@ -61,6 +61,24 @@ export default function ChatPage() {
     setMensagem("");
   }
 
+  function handleDeletarMensagem(event) {
+    const id = Number(event.target.dataset.id);
+    const listaDeMensagemFiltrada = listaDeMensagens.filter(
+      (mensagemFiltrada) => {
+        return mensagemFiltrada.id != id;
+      }
+    );
+
+    supabaseClient
+      .from("mensagens")
+      .delete()
+      .match({ id: id })
+      .then(({ data }) => data);
+
+    // Setando a nova lista filtrada, com uma mensagem a menos
+    setListaDeMensagens(listaDeMensagemFiltrada);
+  }
+
   return (
     <Box
       styleSheet={{
@@ -104,7 +122,10 @@ export default function ChatPage() {
           }}
         >
           {!removeLoading && <Loading />}
-          <MessageList mensagens={listaDeMensagens} />
+          <MessageList
+            mensagens={listaDeMensagens}
+            delMensagem={handleDeletarMensagem}
+          />
           {/* {listaDeMensagens.map((mensagemAtual) => {
             return (
               <li key={mensagemAtual.id}>s
@@ -202,6 +223,7 @@ function Header() {
 
 function MessageList(props) {
   console.log("MessageList", props);
+  const handleDeletarMensagem = props.delMensagem;
   return (
     <Box
       tag="ul"
@@ -223,6 +245,7 @@ function MessageList(props) {
               borderRadius: "5px",
               padding: "6px",
               marginBottom: "12px",
+              wordWrap: "break-word",
               hover: {
                 backgroundColor: appConfig.theme.colors.neutrals[700],
               },
@@ -230,30 +253,57 @@ function MessageList(props) {
           >
             <Box
               styleSheet={{
-                marginBottom: "8px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Image
+              <Box
                 styleSheet={{
-                  width: "20px",
-                  height: "20px",
-                  borderRadius: "50%",
-                  display: "inline-block",
-                  marginRight: "8px",
+                  marginBottom: "8px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
-                src={`https://github.com/${mensagem.de}.png`}
-              />
-              <Text tag="strong">{mensagem.de}</Text>
-              <Text
-                styleSheet={{
-                  fontSize: "10px",
-                  marginLeft: "8px",
-                  color: appConfig.theme.colors.neutrals[300],
-                }}
-                tag="span"
               >
-                {new Date().toLocaleDateString()}
-              </Text>
+                <Image
+                  styleSheet={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    marginRight: "8px",
+                  }}
+                  src={`https://github.com/${mensagem.de}.png`}
+                />
+                <Text tag="strong">{mensagem.de}</Text>
+                <Text
+                  styleSheet={{
+                    fontSize: "10px",
+                    marginLeft: "8px",
+                    paddingTop: "3px",
+                    color: appConfig.theme.colors.neutrals[300],
+                  }}
+                  tag="span"
+                >
+                  {new Date().toLocaleDateString()}
+                </Text>
+              </Box>
+              <Box
+                onClick={handleDeletarMensagem}
+                title={`Apagar mensagem`}
+                styleSheet={{
+                  padding: "2px 15px",
+                  cursor: "pointer",
+                  color: appConfig.theme.colors.primary["600"],
+                  hover: {
+                    color: appConfig.theme.colors.primary["200"],
+                  },
+                }}
+                data-id={mensagem.id}
+              >
+                x
+              </Box>
             </Box>
             {mensagem.texto.startsWith(":sticker:") ? (
               <Image
