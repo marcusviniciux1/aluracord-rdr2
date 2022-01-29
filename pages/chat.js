@@ -213,7 +213,7 @@ function Header() {
         <Button
           variant="tertiary"
           colorVariant="neutral"
-          label="Logout"
+          label="Sair"
           href="/"
         />
       </Box>
@@ -308,7 +308,7 @@ function MessageList(props) {
             {mensagem.texto.startsWith(":sticker:") ? (
               <Image
                 styleSheet={{
-                  width: "300px",
+                  width: "150px",
                   height: "150px",
                 }}
                 src={mensagem.texto.replace(":sticker:", "")}

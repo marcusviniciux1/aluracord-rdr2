@@ -58,7 +58,7 @@ export function ButtonSendSticker(props) {
               fontWeight: "bold",
             }}
           >
-            Stickers
+            Adesivos
           </Text>
           <Box
             tag="ul"
